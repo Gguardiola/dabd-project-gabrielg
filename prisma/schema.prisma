@@ -1,0 +1,77 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model empresa {
+  id_empresa BigInt       @id
+  nombre     String       @db.VarChar(50)
+  supervisor supervisor[]
+}
+
+model informetarea {
+  id_viaje        BigInt
+  id_tarea        Int
+  veredicto       String?
+  tarea           tarea           @relation(fields: [id_tarea], references: [id_tarea])
+  viajetripulante viajetripulante @relation(fields: [id_viaje], references: [id_viaje])
+
+  @@id([id_viaje, id_tarea])
+}
+
+model nave {
+  nombre          String            @id @db.VarChar(50)
+  modelo          String            @db.VarChar(50)
+  color           String            @db.VarChar(50)
+  viajetripulante viajetripulante[]
+}
+
+model persona {
+  id               Int               @id @default(autoincrement())
+  fecha_nacimiento DateTime          @db.Date
+  nombre           String            @db.VarChar(50)
+  viajetripulante  viajetripulante[]
+}
+
+model supervisa {
+  id_viaje_s      BigInt
+  id_viaje_i      BigInt
+  viajetripulante viajetripulante @relation(fields: [id_viaje_i], references: [id_viaje])
+  supervisor      supervisor      @relation(fields: [id_viaje_s], references: [id_viaje])
+
+  @@id([id_viaje_s, id_viaje_i])
+}
+
+model supervisor {
+  id_viaje        BigInt          @id
+  id_empresa      BigInt
+  supervisa       supervisa[]
+  empresa         empresa         @relation(fields: [id_empresa], references: [id_empresa])
+  viajetripulante viajetripulante @relation(fields: [id_viaje], references: [id_viaje])
+}
+
+model tarea {
+  id_tarea     Int            @id @default(autoincrement())
+  desc_tarea   String         @db.VarChar(500)
+  fecha_inicio DateTime       @db.Date
+  fecha_fin    DateTime?      @db.Date
+  sector_nave  String         @db.VarChar(50)
+  informetarea informetarea[]
+}
+
+model viajetripulante {
+  id_viaje       BigInt         @id
+  nombre         String         @db.VarChar(50)
+  id             Int            @default(autoincrement())
+  fecha_abordaje DateTime       @db.Date
+  ingeniero      Boolean
+  informetarea   informetarea[]
+  supervisa      supervisa[]
+  supervisor     supervisor?
+  persona        persona        @relation(fields: [id], references: [id])
+  nave           nave           @relation(fields: [nombre], references: [nombre])
+}
