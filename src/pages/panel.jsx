@@ -28,19 +28,19 @@ export default function Home(){
           <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
               <ul class=" flex flex-wrap -mb-px">
                   <li class="mr-2">
-                      <a onClick={() => setCurrentPage('naves')} className={currentPage == "naves" ? topbarStyles.currentTab : topbarStyles.tab}>Gestionar Naves</a>
+                      <a onClick={() => setCurrentPage('naves')} className={currentPage == "naves" ? topbarStyles.currentTab : topbarStyles.tab}>Naves</a>
                   </li>
                   <li class="mr-2">
-                      <a onClick={() => setCurrentPage('personas')} className={currentPage == "personas" ? topbarStyles.currentTab : topbarStyles.tab}>Agregar personas al registro</a>
+                      <a onClick={() => setCurrentPage('personas')} className={currentPage == "personas" ? topbarStyles.currentTab : topbarStyles.tab}>Registro de personas</a>
                   </li>
                   <li class="mr-2">
-                      <a onClick={() => setCurrentPage('viajes')} className={currentPage == "viajes" ? topbarStyles.currentTab : topbarStyles.tab}>Gestionar viajes (tripulante)</a>
+                      <a onClick={() => setCurrentPage('viajes')} className={currentPage == "viajes" ? topbarStyles.currentTab : topbarStyles.tab}>Gestionar viajes</a>
                   </li>
                   <li class="mr-2">
                       <a onClick={() => setCurrentPage('tareas')} className={currentPage == "tareas" ? topbarStyles.currentTab : topbarStyles.tab}>Gestionar tareas</a>
                   </li>
                   <li class="mr-2">
-                      <a onClick={() => setCurrentPage('supervisores')} className={currentPage == "supervisores" ? topbarStyles.currentTab : topbarStyles.tab}>Agregar supervisor</a>
+                      <a onClick={() => setCurrentPage('supervisores')} className={currentPage == "supervisores" ? topbarStyles.currentTab : topbarStyles.tab}>Gestionar supervisores</a>
                   </li>
               </ul>
           </div>

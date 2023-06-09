@@ -74,6 +74,4 @@ model viajetripulante {
   supervisor     supervisor?
   persona        persona        @relation(fields: [id], references: [id])
   nave           nave           @relation(fields: [nombre], references: [nombre])
-
-  @@unique([id, fecha_abordaje])
 }
