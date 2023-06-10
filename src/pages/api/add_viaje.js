@@ -43,6 +43,7 @@ export default async function add_viaje(req, res){
         }
         await prisma.$disconnect
     }catch (error){
+        await prisma.$disconnect
         if(error.code == "P2002"){
             return res.status(500).json({status: "error", body: "Error! Este viaje ya se encuentra en el registro!"})
         }

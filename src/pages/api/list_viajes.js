@@ -11,10 +11,12 @@ export default async function list_viajes(req, res){
     let body = "none"
     try{
         
-        body = await prisma.viajetripulante.findMany()
+        //body = await prisma.viajetripulante.findMany()
+        body = await prisma.$queryRaw`select a.id_viaje,a.nombre,a.id,b.nombre as nombre_persona, a.fecha_abordaje,a.ingeniero from viajetripulante as a join persona as b on b.id = a.id;`
 
         await prisma.$disconnect
     }catch (error){
+        await prisma.$disconnect
         return res.status(500).json({status: "error", body: "Error inesperado: "+error.message})
 
     }

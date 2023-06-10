@@ -13,6 +13,7 @@ export default async function list_empresas(req, res){
         body = await prisma.empresa.findMany()
         await prisma.$disconnect
     }catch (error){
+        await prisma.$disconnect
         return res.status(500).json({status: "error", body: "Error inesperado"})
 
     }

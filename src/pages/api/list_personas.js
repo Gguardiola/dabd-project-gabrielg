@@ -17,6 +17,7 @@ export default async function list_personas(req, res){
      
         await prisma.$disconnect
     }catch (error){
+        await prisma.$disconnect
         return res.status(500).json({status: "error", body: "Error inesperado: "+error.message})
 
     }
