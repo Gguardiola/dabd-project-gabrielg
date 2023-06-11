@@ -10,7 +10,9 @@ export default async function list_naves(req, res){
     console.log("TEST APICALL: "+JSON.stringify(req.headers.auth))
     let body = "none"
     try{
-        body = await prisma.nave.findMany()
+        body = await prisma.nave.findMany({
+            orderBy: { nombre: 'asc' },
+          })
         await prisma.$disconnect
     }catch (error){
         await prisma.$disconnect

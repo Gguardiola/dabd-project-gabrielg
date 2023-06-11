@@ -1,19 +1,21 @@
 import { PrismaClient } from '@prisma/client'
 
-export default async function list_viajes(req, res){
+export default async function list_ingenieros_supervisados(req, res){
     //protección
-    if(req.headers.auth != "yes"){
+    if(req.body.auth != "yes"){
         return res.status(403).json({"error" : "acceso denegado"})
 
     }
     const prisma = new PrismaClient()
-    console.log("TEST APICALL: "+JSON.stringify(req.headers.auth))
+    console.log("TEST APICALL: "+JSON.stringify(req.body.auth))
     let body = "none"
     try{
-        
-        //body = await prisma.viajetripulante.findMany()
-        body = await prisma.$queryRaw`select a.id_viaje,a.nombre,a.id,b.nombre as nombre_persona, a.fecha_abordaje,a.ingeniero from viajetripulante as a join persona as b on b.id = a.id order by a.id_viaje asc;`
-
+        body = await prisma.supervisa.findMany({
+            where:{
+                id_viaje_s: parseInt(req.body.id_viaje_s)
+            },
+            orderBy: { id_viaje_i: 'asc' },
+          })
         await prisma.$disconnect
     }catch (error){
         await prisma.$disconnect

@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 
-export default async function add_ingeniero(req, res){
+export default async function add_ingenieroTarea(req, res){
     //protección
     if(req.body.auth != "yes"){
         return res.status(403).json({"error" : "acceso denegado"})
@@ -10,9 +10,10 @@ export default async function add_ingeniero(req, res){
     console.log("TEST APICALL: "+JSON.stringify(req.body))
     let body = "none"
     try{
+
         const ingenieroInViajetripulante = await prisma.viajetripulante.findMany({
             where: {
-                id_viaje: parseInt(req.body.id_viaje_i)
+                id_viaje: parseInt(req.body.ingeniero)
             },
             select: {
                 ingeniero: true
@@ -24,28 +25,32 @@ export default async function add_ingeniero(req, res){
         //control ingeniero vs supervisor tabla
         if(ingenieroInViajetripulante.length == 1 && ingenieroInViajetripulante[0].ingeniero == true ){
 
-            body = await prisma.supervisa.create({
+            await prisma.informetarea.create({
                 data: {
-                    id_viaje_i: parseInt(req.body.id_viaje_i),
-                    id_viaje_s: parseInt(req.body.id_viaje_s)
+                    id_viaje: parseInt(req.body.ingeniero),
+                    id_tarea: parseInt(req.body.id_tarea),
+                    veredicto: null
                 }
-
             })
-        } else{
+
+
+        }
+        else{
             return res.status(500).json({status: "error", body: "Error! No se encuentra el ingeniero!"})
         }
+        
         await prisma.$disconnect
     }catch (error){
         await prisma.$disconnect
         if(error.code == "P2002"){
-            return res.status(500).json({status: "error", body: "Error! Este tripulante ya se encuentra supervisado por este supervisor!"})
+            return res.status(500).json({status: "error", body: "Error! Esta tarea ya se encuentra en el registro!"})
         }
         else{
             console.log(JSON.stringify(error.message))
-            return res.status(500).json({status: "error", body: "Error inesperado: \n El ingeniero no existe!"})
+            return res.status(500).json({status: "error", body: "Error inesperado: "+error.message})
         }
     }
-    return res.status(200).json({status: "ok",body: "supervisión agregada correctamente!"});
+    return res.status(200).json({status: "ok",body: "Ingeniero agregado correctamente!"});
 }
 
 

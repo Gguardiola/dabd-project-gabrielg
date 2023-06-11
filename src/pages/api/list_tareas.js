@@ -13,7 +13,9 @@ export default async function list_tareas(req, res){
     let body = "none"
 
     try{
-        body = await prisma.tarea.findMany()
+        body = await prisma.tarea.findMany({
+            orderBy: { id_tarea: 'asc' },
+          })
      
         await prisma.$disconnect
     }catch (error){

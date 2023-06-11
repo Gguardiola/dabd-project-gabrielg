@@ -11,7 +11,7 @@ import Viajes from '../component/Viajes'
 import Naves from '../component/Naves'
 
 export default function Home(){
-  const [currentPage, setCurrentPage] = useState('main')
+  const [currentPage, setCurrentPage] = useState('naves')
 
 
   return (

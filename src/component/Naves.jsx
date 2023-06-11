@@ -15,6 +15,7 @@ export default function Naves(){
     const [newNombre, setNombre] = useState("")
     const [newColor, setColor] = useState("")
     const [newModelo, setModelo] = useState("")
+    const [newSearchValue, setSearchValue] = useState("")
 
     //get naves
     useEffect(() =>{
@@ -74,7 +75,22 @@ export default function Naves(){
             return error.response;
         });
     }
-    var { slice, range } = useTable(test, page, rowsPerPage);
+
+    async function updateNave(oldNombre, newNave) {
+        return await apiEndpoint.post("/update_nave", {
+            auth: "yes",
+            outdatedNombre: oldNombre,
+            nombre: newNave  
+        }).then(function (response) {
+            console.log(response)
+            alert(response.data.body);
+            setRefresh(!refresh)
+        }).catch(error => {
+            console.log(error)
+            alert(error.response.data.body);
+            return error.response;
+        });
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -92,7 +108,18 @@ export default function Naves(){
           await delNave(e)
         }
     }
-
+    const handleUpdateButton = async (e) => {
+        const newNave = prompt("Introduce el nuevo nombre de la nave:")
+        let result = "none"
+        if (newNave.length > 0){
+            result = window.confirm('¿Deseas cambiar el nombre '+e+' por "'+newNave+'"?');
+        }
+        
+        if (result) {
+          console.log(e)
+          await updateNave(e,newNave)
+        }
+    }
     const newNombreHandler = (e) => {
         console.log(e.target.value)
         setNombre(e.target.value)
@@ -105,6 +132,24 @@ export default function Naves(){
         console.log(e.target.value)
         setModelo(e.target.value)
     }
+
+    const searchValueHandler = (e) => {
+        e.preventDefault()
+        if (test){
+            if(e.target.value.length > 0){
+            setSearchValue(e.target.value)
+            const newFiltrado = test.filter((item) =>
+                item.nombre.toLowerCase().includes(newSearchValue.toLowerCase())
+            );
+            setTest(newFiltrado)
+            }
+            else setRefresh(!refresh)
+        }
+    }
+
+      
+    var { slice, range } = useTable(test, page, rowsPerPage);
+
     return(
         <>
         <div className='grid grid-cols-3 gap-4'>
@@ -133,7 +178,17 @@ export default function Naves(){
 
 
             </Card>
-            
+            <div className='col-span-2 grid grid-cols-2 gap-4'>
+                <form className='w-full col-span-2'>   
+                    <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                            <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        </div>
+                        <input type="search"  onChange={searchValueHandler} id="default-search" class="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Andromeda vi..." required></input>
+                        
+                    </div>
+                </form>
                 <div class="w-full col-span-2 overflow-x-auto shadow-md sm:rounded-lg">
                     <table class="w-full h-full text-sm text-left text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -146,6 +201,9 @@ export default function Naves(){
                                 </th>
                                 <th scope="col" class="px-6 py-3">
                                     Modelo
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    <span class="sr-only">Editar</span>
                                 </th>
                                 <th scope="col" class="px-6 py-3">
                                     <span class="sr-only">Editar</span>
@@ -168,6 +226,9 @@ export default function Naves(){
                                 </td>
                                 <td class="px-6 py-4 text-right">
                                     <a onClick={() => handleDeleteButton(result.nombre)} class="font-medium text-red-600 dark:text-red-500 cursor-pointer">Borrar</a>
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <a onClick={() => handleUpdateButton(result.nombre)} class="font-medium text-red-600 dark:text-blue-500 cursor-pointer">Cambiar nombre</a>
                                 </td>
                             </tr>
                             )) 
@@ -194,6 +255,7 @@ export default function Naves(){
                     </table>
                     
                 </div>
+            </div>
                 <div></div>
                 <TableFooter range={range} slice={slice} setPage={setPage} page={page} />
         </div>

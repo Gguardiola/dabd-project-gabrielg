@@ -13,7 +13,9 @@ export default async function list_personas(req, res){
     let body = "none"
 
     try{
-        body = await prisma.persona.findMany()
+        body = await prisma.persona.findMany({
+            orderBy: { id: 'asc' },
+          })
      
         await prisma.$disconnect
     }catch (error){
