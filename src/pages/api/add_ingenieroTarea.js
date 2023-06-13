@@ -10,7 +10,7 @@ export default async function add_ingenieroTarea(req, res){
     console.log("TEST APICALL: "+JSON.stringify(req.body))
     let body = "none"
     try{
-
+        //busca si el ingeniero es realmente ingeniero
         const ingenieroInViajetripulante = await prisma.viajetripulante.findMany({
             where: {
                 id_viaje: parseInt(req.body.ingeniero)
@@ -24,7 +24,7 @@ export default async function add_ingenieroTarea(req, res){
         console.log("ingeniero? "+ ingenieroInViajetripulante.length)
         //control ingeniero vs supervisor tabla
         if(ingenieroInViajetripulante.length == 1 && ingenieroInViajetripulante[0].ingeniero == true ){
-
+            //CONCEPTO ASOCIATIVO
             await prisma.informetarea.create({
                 data: {
                     id_viaje: parseInt(req.body.ingeniero),

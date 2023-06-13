@@ -273,6 +273,7 @@ export default function Viajes(){
                                     <td class="px-6 py-4">
                                         {new Date(result.fecha_abordaje).toLocaleDateString()}
                                     </td>
+                                    {/* SI ES INGENIERO, MOSTRAR TAG */}
                                     <td class="px-6 py-4 text-right">
                                         {result.ingeniero == true ? <p class="font-bold text-blue-600">Ingeniero</p>: <p class="font-bold text-red-600">Supervisor</p>}
                                     </td>

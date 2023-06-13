@@ -17,7 +17,7 @@ export default async function add_viaje(req, res){
                 nombre: req.body.nombre,
                 id: parseInt(req.body.id),
                 fecha_abordaje: req.body.fecha_abordaje+"T00:00:00.000Z",
-                ingeniero: req.body.ingeniero
+                ingeniero: req.body.ingeniero,
             }
 
         })
@@ -52,7 +52,7 @@ export default async function add_viaje(req, res){
             return res.status(500).json({status: "error", body: "Error inesperado: "+error.message})
         }
     }
-    return res.status(200).json({status: "ok",body: "Viaje creado correctamente!"});
+    return res.status(200).json({status: "ok",body: "Viaje "+randomNumberInRange+" creado correctamente!"});
 }
 
 

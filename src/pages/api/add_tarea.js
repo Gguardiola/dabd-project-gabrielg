@@ -11,42 +11,51 @@ export default async function add_tarea(req, res){
     let body = "none"
     const randomNumberInRange = Math.floor(Math.random() * (500000 - 500 + 1)) + 500
     try{
-
-        const ingenieroInViajetripulante = await prisma.viajetripulante.findMany({
-            where: {
-                id_viaje: parseInt(req.body.ingeniero)
-            },
-            select: {
-                ingeniero: true
+        body = await prisma.tarea.create({
+            data: {
+                id_tarea: randomNumberInRange,
+                desc_tarea: req.body.descripcion,
+                fecha_inicio: req.body.fecha_inicio+"T00:00:00.000Z",
+                fecha_fin:null,
+                sector_nave: req.body.sector
+            }
+        })    
+        // const ingenieroInViajetripulante = await prisma.viajetripulante.findMany({
+        //     where: {
+        //         id_viaje: parseInt(req.body.ingeniero)
+        //     },
+        //     select: {
+        //         ingeniero: true
                 
-            },
-        })
-        console.log(ingenieroInViajetripulante)
-        console.log("ingeniero? "+ ingenieroInViajetripulante.length)
-        if(ingenieroInViajetripulante.length == 1 && ingenieroInViajetripulante[0].ingeniero == true ){
-            body = await prisma.tarea.create({
-                data: {
-                    id_tarea: randomNumberInRange,
-                    desc_tarea: req.body.descripcion,
-                    fecha_inicio: req.body.fecha_inicio+"T00:00:00.000Z",
-                    fecha_fin:null,
-                    sector_nave: req.body.sector
-                }
+        //     },
+        // })
+        // console.log(ingenieroInViajetripulante)
+        // console.log("ingeniero? "+ ingenieroInViajetripulante.length)
+        // if(ingenieroInViajetripulante.length == 1 && ingenieroInViajetripulante[0].ingeniero == true ){
+        //     body = await prisma.tarea.create({
+        //         data: {
+        //             id_tarea: randomNumberInRange,
+        //             desc_tarea: req.body.descripcion,
+        //             fecha_inicio: req.body.fecha_inicio+"T00:00:00.000Z",
+        //             fecha_fin:null,
+        //             sector_nave: req.body.sector
+        //         }
 
-            })
-            await prisma.informetarea.create({
-                data: {
-                    id_viaje: parseInt(req.body.ingeniero),
-                    id_tarea: randomNumberInRange,
-                    veredicto: null
-                }
-            })
+        //     })
+        //     //CONCEPTO ASOCIATIVO
+        //     await prisma.informetarea.create({
+        //         data: {
+        //             id_viaje: parseInt(req.body.ingeniero),
+        //             id_tarea: randomNumberInRange,
+        //             veredicto: null
+        //         }
+        //     })
 
 
-        }
-        else{
-            return res.status(500).json({status: "error", body: "Error! No se encuentra el ingeniero!"})
-        }
+        // }
+        // else{
+        //     return res.status(500).json({status: "error", body: "Error! No se encuentra el ingeniero!"})
+        // }
         
         await prisma.$disconnect
     }catch (error){

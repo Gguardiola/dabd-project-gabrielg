@@ -12,7 +12,9 @@ export default async function list_viajes(req, res){
     try{
         
         //body = await prisma.viajetripulante.findMany()
-        body = await prisma.$queryRaw`select a.id_viaje,a.nombre,a.id,b.nombre as nombre_persona, a.fecha_abordaje,a.ingeniero from viajetripulante as a join persona as b on b.id = a.id order by a.id_viaje asc;`
+        //join
+        body = await prisma.$queryRaw`select a.id_viaje,a.nombre,a.id,b.nombre as nombre_persona, a.fecha_abordaje,a.ingeniero
+        from viajetripulante as a join persona as b on b.id = a.id order by a.id_viaje asc;`
 
         await prisma.$disconnect
     }catch (error){
