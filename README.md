@@ -6,5 +6,5 @@ El objetivo de esta aplicación es gestionar una base de datos relacional a trav
 
 ## Vista previa de la app
 
-![ImagenDEMO](https://imgur.com/a/SVx36ZE)
+![ImagenDEMO](https://i.imgur.com/FTxbe30.jpg)
 
